@@ -1,0 +1,82 @@
+@import url('https://fonts.googleapis.com/css2?family=Jersey+25&family=Pixelify+Sans:wght@400..700&display=swap');
+body {
+  margin: 0;
+  padding: 0;
+  font-family: "Pixelify Sans", sans-serif;
+  background-color: #cce3d6;
+  background-image: url('./images/bg3.jpg'); 
+  background-size: cover;
+  color: #333;
+}
+
+.container {
+  max-width: 800px;
+  margin: auto;
+  padding: 20px;
+}
+
+h1 {
+  color: #3e4d3a;
+  text-shadow: 1px 1px #fff;
+  font-family: "Jersey 25", sans-serif;
+  font-size: 72px;
+}
+
+h2 {
+  color: #3e4d3a;
+  text-shadow: 1px 1px #fff;
+}
+
+.box {
+  background-color: #fffef0;
+  border: 3px solid #7d6e4f;
+  border-radius: 8px;
+  padding: 15px;
+  box-shadow: 2px 2px #aaa;
+  margin-bottom: 20px;
+}
+
+ul {
+  list-style: none;
+  padding: 0;
+}
+
+li {
+  background: #fcf8e8;
+  margin-bottom: 8px;
+  padding: 10px;
+  border: 2px dashed #bda27a;
+  border-radius: 4px;
+  transition: transform 0.2s;
+}
+
+li:hover {
+  transform: scale(1.02);
+  background-color: #f3edd0;
+}
+
+
+.profile-img {
+  width: 100px;
+  height: 100px;
+  object-fit: cover;
+  border-radius: 8px;
+  margin-bottom: 10px;
+  display: block;
+}
+
+#profile {
+  display: flex;
+  align-items: center; 
+  gap: 20px;
+}
+
+
+.profile-details {
+  display: flex;
+  flex-direction: column;
+}
+
+#profile p {
+  margin: 5px 0;
+}
