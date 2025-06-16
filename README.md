@@ -19,7 +19,7 @@ RPG style app where users complete daily tasks (quest) and earn XP to level up. 
     * The -nodes flag ensures the private key is not encrypted, allowing the server to start without prompting for a password.
     * During the prompt, fields like Country, State, Organization, and Common Name (typically localhost for development) were filled.
 > *Note:* SSL Integration in Code In APP.js, the certificate files were loaded using Node.js's fs module and passed to the https.createServer() method:
-![image](https://hackmd.io/_uploads/HyieCmKXeg.png)
+![certificate](public/images/cert.png)
 
 ### Rationale and Real-World Considerations
 
@@ -44,7 +44,7 @@ app.use(helmet());`
 > 
 
 1a. Content Security Policy (CSP)
-![image](https://hackmd.io/_uploads/S1V1zEtQgx.png)
+![certificate](public/images/helmet.png)
 - Protects against Cross-Site Scripting (XSS)
 - Tells the browser what sources it's allowed to load content (scripting, styles, etc) which is set to "self".
 
