@@ -119,11 +119,21 @@ The caching strategy I've implemented balances performance with data privacy and
 - Sensitive or dynamic content (profile and post requests) explicitly avoids caching.
 - We use stale-while-revalidate where freshness and performance are both important (like quest lists).
 
-
 Trade-offs:
 - Longer caching improves performance but risks showing outdated data.
 - Avoiding caching on sensitive routes ensures security but increases server load.
 - Using stale-while-revalidate mitigates this by returning a slightly stale response while refreshing it in the background.
+
+
+### Lessons Learned
+
+Through this project, I learned a lot about how HTTPS and SSL work in real-world applications. At first, generating SSL certificates using OpenSSL was confusing, but doing it step-by-step helped me understand how encryption works between the browser and server.
+
+Setting up a secure Express server with https.createServer() was something I hadn’t done before, and figuring out how to pass the certificate through in-class learning and applying it on my own was a great hands-on learning experience.
+
+I also had some minor issues with Helmet's content security policy as I've blocked some of my images and styling until I've updated the rules.
+
+Finally, writing cache strategies for each route showed me how caching can improve performance but also affect data freshness and security. I had a hard time understanding the proper use cases for different cache settings at first, but with reading and practice, I learned how to choose the right strategy based on whether the data is public, private, or user-generated.
 
 ---
 
