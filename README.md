@@ -117,7 +117,7 @@ Cache-Control: public, max-age=600
 The caching strategy I've implemented balances performance with data privacy and security:
 - Public, non-sensitive data (quests and guilds) are cached to reduce server load and improve response time.
 - Sensitive or dynamic content (profile and post requests) explicitly avoids caching.
-- We use stale-while-revalidate where freshness and performance are both important (like quest lists).
+- I used stale-while-revalidate where freshness and performance are both important (like quest lists).
 
 Trade-offs:
 - Longer caching improves performance but risks showing outdated data.
