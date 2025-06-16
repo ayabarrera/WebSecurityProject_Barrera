@@ -9,7 +9,7 @@ RPG style app where users complete daily tasks (quest) and earn XP to level up. 
 * I used OpenSSL, a widely adopted open-source toolkit for SSL/TLS, to create a self-signed certificate suitable for development and testing environments.
 
 ### Steps Taken
-1. Create a new folder for the project [Barrera_Phase1].
+1. Create a new folder for the project [Websecurity_Phase1].
 2. Open terminal in VSCODE or your choice of editor. 
 3. Create a Certificate Directory at project root.
     `mkdir cert`
