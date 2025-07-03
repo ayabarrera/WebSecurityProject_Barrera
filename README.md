@@ -206,3 +206,10 @@ Barrera_Phase1/
 |Helmet: | A Node.js middleware that helps secure Express apps by setting various HTTP headers. | 
 | Cache-Control: | An HTTP header used to specify caching policies for responses. | 
 | HSTS (HTTP Strict Transport Security):| A policy that forces browsers to use HTTPS connections. | 
+
+
+
+
+-----
+
+npm install mongoose dotenv jsonwebtoken cookie-parser argon2
