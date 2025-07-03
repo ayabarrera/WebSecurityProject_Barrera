@@ -2,8 +2,19 @@ const fs = require("fs");
 const https = require("https");
 const express = require("express");
 const helmet = require("helmet");
+const mongoose = require("mongoose");
+const cookieParser = require("cookie-parser");
+require("dotenv").config(); // load .env variables
+
 const app = express();
 
+// Connect to MongoDB 
+mongoose
+  .connect(process.env.MONGO_URI)
+  .then(() => console.log("✅ Connected to MongoDB"))
+  .catch((err) => console.error("❌ MongoDB connection failed:", err));
+
+// Middleware
 app.use(helmet());
 
 app.use(
@@ -27,15 +38,21 @@ app.use(
 
 app.use(express.json());
 
-// routes quest profile and guild
+app.use(cookieParser()); 
+
+app.use(express.static("public"));
+
+// mounting routes
 const questsRoute = require("./routes/quests");
 const profileRoute = require("./routes/profile");
 const guildsRoute = require("./routes/guilds");
+const authRoute = require("./routes/auth");
 
 app.use(express.static('public'));
 app.use("/quests", questsRoute);
 app.use("/profile", profileRoute);
 app.use("/guilds", guildsRoute);
+app.use("/auth", authRoute);
 
 // cert keys
 const credentials = {
