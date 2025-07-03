@@ -1,6 +1,8 @@
 # Daily Quest Tracker
 RPG style app where users complete daily tasks (quest) and earn XP to level up. It would allow users to form positive habits by gamifying their routines.
 
+For Phase 2 documentation, see [PHASE2.md](PHASE2.md)
+
 ## `Part A: Why this App?`
 * This app merges two of my core interests: gaming and personal productivity. By gamifying everyday tasks as quests, it turns routine responsibilities into engaging challenges, encouraging consistent habit formation in a fun, rewarding way.
 
@@ -206,10 +208,3 @@ Barrera_Phase1/
 |Helmet: | A Node.js middleware that helps secure Express apps by setting various HTTP headers. | 
 | Cache-Control: | An HTTP header used to specify caching policies for responses. | 
 | HSTS (HTTP Strict Transport Security):| A policy that forces browsers to use HTTPS connections. | 
-
-
-
-
------
-
-npm install mongoose dotenv jsonwebtoken cookie-parser argon2
