@@ -57,7 +57,7 @@ cd <project-folder>
 
 2. Install all dependencies:
 ```
-npm install express mongoose dotenv passport passport-google-oauth20 express-session cookie-parser jsonwebtoken argon2 helmet nodemailer
+npm install express mongoose dotenv passport passport-google-oauth20 express-session cookie-parser jsonwebtoken argon2 helmet nodemailer express-rate-limit csurf
 
 ```
 
@@ -135,3 +135,88 @@ node app.js
 * Cookies are HTTP-only, secure, and use SameSite=Strict to enhance security.
 * JWT tokens expire after 15 minutes to minimize risk.
 * Sessions managed with express-session and integrated with Passport.js for OAuth.
+
+
+---
+
+# Part B: Reflection Checkpoint — Role-Based Access Control (RBAC)
+
+## Access Control Structure
+- Our access control system is based on Role-Based Access Control (RBAC), where each user is assigned a role upon registration or login (e.g., "User", "Admin", "Moderator").
+- This role is stored both in the database and encoded in the JWT token after login.
+
+We implemented middleware to check the user's role and restrict access to protected routes accordingly:
+* /profile: accessible to any authenticated user
+* /dashboard: shared by all roles, but returns content dynamically based on role
+* /admin: restricted to users with role === 'Admin'
+
+This setup allows us to:
+* Reuse authentication logic
+* Easily add more roles or adjust access levels
+* Keep each route focused and maintainable
+
+##    Roles Chosen
+
+
+| Role         | Description                            | 
+| --------     | --------                               |
+| User         | Default role for regular users         | 
+| Moderator    | Potential content manager or approver  | 
+| Admin        | Full access to protected admin routes  | 
+
+> We started with these three because they offer a good balance of flexibility without being too complex for our current scope. Adding more would be easy if needed.
+
+
+##    Security vs. User Experience Trade-Offs
+* I chose JWT + cookie-based authentication (httpOnly, secure, sameSite) for strong session security.
+* This protects against XSS but makes testing and development more difficult (e.g., cookies don't show in Postman unless HTTPS is used).
+* Having a role field in the JWT allows it to avoid extra database queries for role checks — improving performance.
+
+# Part C: Reflection Checkpoint — JWT Token Storage and Management
+* For token storage, we chose to store the access token and refresh token securely as HttpOnly cookies rather than using localStorage or sessionStorage. 
+* This decision was primarily driven by security concerns. HttpOnly cookies cannot be accessed by client-side JavaScript, which helps protect against common attacks such as cross-site scripting (XSS).
+* The access token was set with a short expiry time (e.g., 15 minutes) to minimize the window of exposure if the token is compromised.
+* To maintain a smooth user experience without requiring frequent logins, I've implemented a refresh token system that issues new access tokens when the old ones expire.
+* Refresh tokens have a longer expiration (7 days) and are also stored securely in HttpOnly cookies. 
+* One challenge I've faced was balancing security with usability: short-lived access tokens improve security but can cause friction if users are frequently prompted to log in again.
+* The refresh token mechanism helps alleviate this but introduces complexity in securely managing token rotation and invalidation.
+
+
+# Part D: Mitigate Security Risks
+
+### Implemented:
+1. Secure cookies
+```
+res.cookie("token", token, {
+  httpOnly: true,
+  secure: true,
+  sameSite: "Strict",
+  maxAge: 15 * 60 * 1000,
+});
+```
+> HttpOnly: Prevents JavaScript access (mitigates XSS).
+Secure: Ensures cookies are sent over HTTPS only.
+SameSite: "Strict": Blocks CSRF in most cases.
+
+ 2. Session timeout policy
+ ```
+ { expiresIn: "15m" }
+ ```
+>  I've implemented a short-lived token, which limits risks if ever it is stolen.
+
+3. CSRF Protection
+* To protect the application from Cross-Site Request Forgery (CSRF) attacks, we implemented the csurf middleware in our Express app.
+* To prevent this, a CSRF token is generated and validated on all state-changing requests (like POST, PUT, DELETE).
+
+5. Prevent account enumeration
+> From this code
+> ![image](https://hackmd.io/_uploads/Hkw5shVrge.png)
+> To this:
+> ![image](https://hackmd.io/_uploads/HymhinNBxl.png)
+
+This way, it revents attackers from checking for registered emails (aka user enumeration).
+
+
+6. Rate limiting (login attempts)
+* To protect against brute-force attacks, we implemented rate limiting on sensitive routes — specifically the login route.
+* Security: Prevents automated bots from spamming the login form with password guesses.
