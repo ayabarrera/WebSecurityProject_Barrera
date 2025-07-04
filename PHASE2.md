@@ -210,9 +210,9 @@ SameSite: "Strict": Blocks CSRF in most cases.
 
 5. Prevent account enumeration
 > From this code
-> ![image](https://hackmd.io/_uploads/Hkw5shVrge.png)
+> ![Previous Code](public/images/accountenum1.png)
 > To this:
-> ![image](https://hackmd.io/_uploads/HymhinNBxl.png)
+> ![Updated Code](public/images/accountenum2.png)
 
 This way, it revents attackers from checking for registered emails (aka user enumeration).
 
