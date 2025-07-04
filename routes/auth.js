@@ -68,11 +68,9 @@ router.post("/register", async (req, res) => {
 router.post("/login", async (req, res) => {
   const { email, password } = req.body;
   try {
-    const user = await User.findOne({ email });
-    if (!user) return res.status(404).json({ error: "User not found" });
-
-    const isMatch = await argon2.verify(user.password, password);
-    if (!isMatch) return res.status(401).json({ error: "Invalid password" });
+    if (!user || !(await argon2.verify(user.password, password))) {
+      return res.status(401).json({ error: "Invalid email or password" });
+    }
 
     const accessToken = jwt.sign(
       { id: user._id, role: user.role },
@@ -111,7 +109,8 @@ router.post("/login", async (req, res) => {
 // --- Refresh Token ---
 router.post("/refresh-token", async (req, res) => {
   const refreshToken = req.cookies.refreshToken;
-  if (!refreshToken) return res.status(401).json({ error: "No refresh token provided" });
+  if (!refreshToken)
+    return res.status(401).json({ error: "No refresh token provided" });
 
   try {
     const decoded = jwt.verify(refreshToken, process.env.REFRESH_SECRET);
@@ -206,7 +205,6 @@ router.post("/reset-password/:token", async (req, res) => {
     res.status(500).json({ error: "Error resetting password" });
   }
 });
-
 
 router.get("/reset-password/:token", async (req, res) => {
   const { token } = req.params;

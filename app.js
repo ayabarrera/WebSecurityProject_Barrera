@@ -6,6 +6,8 @@ const mongoose = require("mongoose");
 const cookieParser = require("cookie-parser");
 const session = require("express-session");
 const passport = require("passport");
+const rateLimit = require("express-rate-limit");
+
 
 require("dotenv").config(); // load .env variables
 
@@ -43,6 +45,22 @@ app.use(
   })
 );
 
+//CSURF
+// Basic rate limiter: max 100 requests per 15 minutes per IP
+const limiter = rateLimit({
+  windowMs: 15 * 60 * 1000, // 15 minutes
+  max: 5, // only 5 login attempts allowed per 15 minutes
+  standardHeaders: true, // Return rate limit info in the `RateLimit-*` headers
+  legacyHeaders: false, // Disable the `X-RateLimit-*` headers
+  message: {
+    error: "Too many requests, please try again later.",
+  },
+});
+
+// Apply rate limiter to login requests
+app.use("/auth/login", limiter);
+
+
 // Session setup
 app.use(
   session({
@@ -66,6 +84,12 @@ app.use(passport.session());
 // Static files
 app.use(express.static("public"));
 
+//CSURF
+const csrf = require("csurf");
+const csrfProtection = csrf({ cookie: true });
+
+app.use(csrfProtection);
+
 // Routes
 const questsRoute = require("./routes/quests");
 const profileRoute = require("./routes/profile");
@@ -74,12 +98,14 @@ const authRoute = require("./routes/auth");
 const dashboardRoute = require("./routes/dashboard");
 const protectedRoutes = require('./routes/protected');
 
+
 app.use("/quests", questsRoute);
 app.use("/profile", profileRoute);
 app.use("/guilds", guildsRoute);
 app.use("/auth", authRoute);
 app.use("/dashboard", dashboardRoute);
 app.use('/', protectedRoutes);
+
 
 // SSL cert keys
 const credentials = {

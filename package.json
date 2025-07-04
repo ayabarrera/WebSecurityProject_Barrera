@@ -2,8 +2,10 @@
   "dependencies": {
     "argon2": "^0.43.0",
     "cookie-parser": "^1.4.7",
+    "csurf": "^1.11.0",
     "dotenv": "^17.0.1",
     "express": "^5.1.0",
+    "express-rate-limit": "^7.5.1",
     "express-session": "^1.18.1",
     "helmet": "^8.1.0",
     "jsonwebtoken": "^9.0.2",
