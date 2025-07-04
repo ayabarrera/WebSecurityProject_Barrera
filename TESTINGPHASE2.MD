@@ -2,8 +2,26 @@
 **Learn about Project Phase 2**
 **Check how to **
 
-:::spoiler Click to go to Phase 2 Documentation :wave:
-[PHASE2.md](PHASE2.md)
+:::spoiler Click to learn more :wave:
+Set column properties and quantities:
+
+```
+  column-count: 2;
+  column-gap: 20px;
+  max-width: 100%;
+```
+
+Set to cancel the text layout width restriction. Removing the syntax will restore HackMD's default text layout width:
+
+```
+.markdown-body, .ui-infobar {
+    max-width: unset !important;
+}
+```
+
+To ensure that Markdown syntax works correctly within a `div` container, please add a blank line before starting to write Markdown.
+
+:pencil2: Feel free to customize it.
 :::
 ::::
 
