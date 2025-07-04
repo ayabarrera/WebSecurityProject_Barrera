@@ -72,12 +72,14 @@ const profileRoute = require("./routes/profile");
 const guildsRoute = require("./routes/guilds");
 const authRoute = require("./routes/auth");
 const dashboardRoute = require("./routes/dashboard");
+const protectedRoutes = require('./routes/protected');
 
 app.use("/quests", questsRoute);
 app.use("/profile", profileRoute);
 app.use("/guilds", guildsRoute);
 app.use("/auth", authRoute);
 app.use("/dashboard", dashboardRoute);
+app.use('/', protectedRoutes);
 
 // SSL cert keys
 const credentials = {
