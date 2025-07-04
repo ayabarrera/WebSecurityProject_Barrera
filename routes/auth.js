@@ -35,6 +35,7 @@ passport.use(
             username: profile.displayName,
             email: profile.emails[0].value,
             googleId: profile.id,
+            password: "GOOGLE_OAUTH", // workaround required field
             role: "User",
           });
         }
@@ -73,22 +74,69 @@ router.post("/login", async (req, res) => {
     const isMatch = await argon2.verify(user.password, password);
     if (!isMatch) return res.status(401).json({ error: "Invalid password" });
 
-    const token = jwt.sign(
+    const accessToken = jwt.sign(
       { id: user._id, role: user.role },
       process.env.JWT_SECRET,
       { expiresIn: "15m" }
     );
 
+    const refreshToken = jwt.sign(
+      { id: user._id },
+      process.env.REFRESH_SECRET,
+      { expiresIn: "7d" }
+    );
+
+    user.refreshToken = refreshToken;
+    await user.save();
+
     res
-      .cookie("token", token, {
+      .cookie("token", accessToken, {
         httpOnly: true,
         secure: true,
         sameSite: "Strict",
         maxAge: 15 * 60 * 1000,
       })
+      .cookie("refreshToken", refreshToken, {
+        httpOnly: true,
+        secure: true,
+        sameSite: "Strict",
+        maxAge: 7 * 24 * 60 * 60 * 1000,
+      })
       .json({ message: "Login successful" });
   } catch (err) {
     res.status(500).json({ error: "Something went wrong" });
+  }
+});
+
+// --- Refresh Token ---
+router.post("/refresh-token", async (req, res) => {
+  const refreshToken = req.cookies.refreshToken;
+  if (!refreshToken) return res.status(401).json({ error: "No refresh token provided" });
+
+  try {
+    const decoded = jwt.verify(refreshToken, process.env.REFRESH_SECRET);
+    const user = await User.findById(decoded.id);
+
+    if (!user || user.refreshToken !== refreshToken) {
+      return res.status(403).json({ error: "Invalid refresh token" });
+    }
+
+    const newAccessToken = jwt.sign(
+      { id: user._id, role: user.role },
+      process.env.JWT_SECRET,
+      { expiresIn: "15m" }
+    );
+
+    res.cookie("token", newAccessToken, {
+      httpOnly: true,
+      secure: true,
+      sameSite: "Strict",
+      maxAge: 15 * 60 * 1000,
+    });
+
+    res.json({ message: "Access token refreshed" });
+  } catch (err) {
+    res.status(403).json({ error: "Expired or invalid refresh token" });
   }
 });
 
@@ -101,7 +149,7 @@ router.post("/forgot-password", async (req, res) => {
 
     const token = crypto.randomBytes(20).toString("hex");
     user.resetPasswordToken = token;
-    user.resetPasswordExpires = Date.now() + 3600000; // 1 hour
+    user.resetPasswordExpires = Date.now() + 3600000;
     await user.save();
 
     const transporter = nodemailer.createTransport({
@@ -111,7 +159,7 @@ router.post("/forgot-password", async (req, res) => {
         pass: process.env.EMAIL_PASS,
       },
       tls: {
-        rejectUnauthorized: false, // for local HTTPS w/ self-signed certs
+        rejectUnauthorized: false,
       },
     });
 
@@ -120,7 +168,6 @@ router.post("/forgot-password", async (req, res) => {
       from: process.env.EMAIL_USER,
       subject: "Password Reset",
       text: `You are receiving this because you (or someone else) have requested a password reset.\n\n
-Please click the link below or paste it into your browser to complete the process:\n\n
 https://${req.headers.host}/auth/reset-password/${token}\n\n
 If you did not request this, please ignore this email.\n`,
     };
@@ -160,25 +207,16 @@ router.post("/reset-password/:token", async (req, res) => {
   }
 });
 
-// GET reset password page (to show form)
+
 router.get("/reset-password/:token", async (req, res) => {
   const { token } = req.params;
-
   try {
     const user = await User.findOne({
       resetPasswordToken: token,
       resetPasswordExpires: { $gt: Date.now() },
     });
-
-    if (!user) {
-      return res.status(400).send("Password reset token is invalid or has expired.");
-    }
-
-    // For a simple JSON response (if API only):
-    res.json({ message: "Token valid, please send POST to reset password" });
-
-    // Or if you want to serve an HTML form (example):
-    // res.sendFile(path.join(__dirname, "../public/reset-password.html"));
+    if (!user) return res.status(400).send("Invalid or expired token");
+    res.json({ message: "Token valid" });
   } catch (err) {
     res.status(500).send("Server error");
   }
