@@ -1,5 +1,7 @@
 # PHASE 2 - QUEST APP
 
+For Phase 2 Testing, see [TESTINGPHASE2.MD](TESTINGPHASE2.MD)
+
 ## Overview
 
 This phase builds on the previous authentication setup by enhancing security, adding authorization with role-based access control (RBAC), and improving session management. The project uses:
