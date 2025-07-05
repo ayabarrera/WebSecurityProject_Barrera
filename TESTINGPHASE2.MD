@@ -1,87 +1,12 @@
-::::info
-**Learn about Project Phase 2**
-**Check how to **
-
-:::spoiler Click to learn more :wave:
-Set column properties and quantities:
-
-```
-  column-count: 2;
-  column-gap: 20px;
-  max-width: 100%;
-```
-
-Set to cancel the text layout width restriction. Removing the syntax will restore HackMD's default text layout width:
-
-```
-.markdown-body, .ui-infobar {
-    max-width: unset !important;
-}
-```
-
-To ensure that Markdown syntax works correctly within a `div` container, please add a blank line before starting to write Markdown.
-
-:pencil2: Feel free to customize it.
-:::
-::::
-
-<style>
-.two-column-layout {
-  column-count: 2; /* Set column number */
-  column-gap: 20px;
-  max-width: 100%;
-  overflow: hidden;
-}
-
-/* Media query for mobile devices */
-@media (max-width: 768px) {
-  .two-column-layout {
-    column-count: 1; /* Switch to single column on small screens */
-    column-gap: 0;   /* Optional: Set gap to 0 for single column */
-  }
-}
-
-.markdown-body, .ui-infobar {
-    max-width: unset !important;
-}
-
-.two-column-layout ul, 
-.two-column-layout ol {
-  margin: 0;
-  padding-left: 20px;
-}
-
-.two-column-layout strong {
-  font-weight: bold;
-}
-
-.two-column-layout em {
-  font-style: italic;
-}
-    
-.two-column-layout h1,
-.two-column-layout h2,
-.two-column-layout h3,
-.two-column-layout h4,
-.two-column-layout h5,
-.two-column-layout h6 {
-    margin-top: 0;    
-}
-</style>
-
-
-
----
 # Security Testing & Debugging Checklist
 
 This section documents the testing strategies used to validate the security and functionality of the authentication and authorization systems.
 
+*See Phase 2 Setting up Documentation* [PHASE2.md](PHASE2.md)
 
 ---
 
-##    A. Local Authentication Testing
-
-<div class="two-column-layout">
+##   A. Local Authentication Testing
     
 ###  Account Creation  using Postman
 
@@ -93,7 +18,6 @@ This section documents the testing strategies used to validate the security and 
 }
 
 ```
-&nbsp;
     
 1. Register 
     - Choose body -> raw -> JSON
@@ -102,17 +26,8 @@ This section documents the testing strategies used to validate the security and 
     ✅ User created
     ✅ Password stored as hash in DB (Argon2)
     
-</div>
-
-&nbsp;
-
-
-
 ---
 
-
-<div class="two-column-layout">
-    
 ### Account Log in
 
 ```
@@ -122,8 +37,6 @@ This section documents the testing strategies used to validate the security and 
 }
 
 ```
-&nbsp;
-&nbsp;
 
 1. Postman
     - POST /auth/login
@@ -132,16 +45,8 @@ This section documents the testing strategies used to validate the security and 
     ✅ JWT has correct payload (id, role)
     ✅ token expires in 15 mins, refreshToken in 7 days
     
-</div>
-
-&nbsp;
-
-
 ---
 
-
-<div class="two-column-layout">
-    
 ### Protected Routes
 
 ```
@@ -150,24 +55,17 @@ This section documents the testing strategies used to validate the security and 
 }
 
 ```
-&nbsp;
-&nbsp;
 
 1. Postman
     - GET /profile or /dashboard
 2. Confirmation
     ✅ Access granted if logged in
     ❌ Access denied if not logged in
-    
-</div>
 
-&nbsp;
 
 ---
 
-##    B. Google OAuth
-<div class="two-column-layout">
-    
+##   B. Google OAuth
 ###  Log in
 
 ```
@@ -176,25 +74,17 @@ This section documents the testing strategies used to validate the security and 
 }
 
 ```
-&nbsp;
     
 1. Visit: https://localhost:3000/auth/google
 2. Confirmation
     ✅ User created with role User
     ✅ Redirected to /dashboard
     ✅ Can access protected routes
-    
-</div>
-
-
 ---
-
-&nbsp;
 
 
 ##   C. Authorization (RBAC) Testing
-<div class="two-column-layout">
-    
+
 ###  User Access
 
 ```
@@ -204,7 +94,7 @@ This section documents the testing strategies used to validate the security and 
   }
 
 ```
-&nbsp;
+
     
 1. Login as regular user
 2. Try accessing /admin
@@ -213,19 +103,10 @@ This section documents the testing strategies used to validate the security and 
     ✅ Retry /admin
     ✅ Should return admin content
 
-
-</div>
-
-&nbsp;
-
 ---
 
-<div class="two-column-layout">
-    
 ### Token Refresh Testing
-    
-&nbsp;
-&nbsp;
+
 
 ```
 {
@@ -233,10 +114,6 @@ This section documents the testing strategies used to validate the security and 
 }
 
 ```
-&nbsp;
-    
-&nbsp;
-
 
 1. Expired Token
     - Wait for access token to expire (15 mins or shorten temporarily)
@@ -248,16 +125,9 @@ This section documents the testing strategies used to validate the security and 
     ✅ New access token issued
     ✅ Protected route access restored
     
-</div>
-
-&nbsp;
-
 ---
-
-<div class="two-column-layout">
     
 ### Brute Force Protection
-&nbsp;
 
 ```
 {
@@ -267,26 +137,14 @@ Please try again after 15 minutes."
 
 
 ```
-&nbsp;
-    
-&nbsp;
-
-
 1. Rate Limiting
     - Send 6+ failed login attempts
 2. Confirmation
     ❌ Login blocked with: "ERROR"
-    
-</div>
-
-&nbsp;
 
 ---
-
-<div class="two-column-layout">
-    
 ### CSRF Protection
-&nbsp;
+
 
 ```
 {
@@ -295,11 +153,6 @@ Please try again after 15 minutes."
 
 
 ```
-&nbsp;
-    
-&nbsp;
-
-
 1. No CSRF Token
     - Submit POST without csrfToken
     ❌ Should fail CSRF validation
@@ -307,16 +160,9 @@ Please try again after 15 minutes."
     - Retrieve req.csrfToken() and include in request
     ✅ Should pass CSRF validation
     
-</div>
-
-&nbsp;
-
 ---
-
-<div class="two-column-layout">
     
 ### Account Enumeration Prevention
-&nbsp;
 
 ```
 {
@@ -325,48 +171,30 @@ Please try again after 15 minutes."
 
 
 ```
-&nbsp;
     
 1. Try login or password reset with non-existent email
 2. Confirmation
     ✅ Response is generic: "Invalid credentials"
     ❌ Should NOT reveal "User not found"
-    
-</div>
-
-&nbsp;
 
 ---
-
-<div class="two-column-layout">
     
 ### Session Fixation Protection
-&nbsp;
-
 ```
 {
     ADD IMAGE HERE
 }
 
-
 ```
-&nbsp;
-    
+
 1. Before login, inspect session cookie
 2. After login, check that session ID:
     ✅ Has changed
     ✅ Is unique per user
     
-</div>
-
-&nbsp;
-
 ---
-
-<div class="two-column-layout">
     
 ### Account Enumeration Prevention
-&nbsp;
 
 ```
 {
@@ -375,23 +203,14 @@ Please try again after 15 minutes."
 
 
 ```
-&nbsp;
-    
 1. Try login or password reset with non-existent email
 2. Confirmation
     ✅ Response is generic: "Invalid credentials"
     ❌ Should NOT reveal "User not found"
-    
-</div>
-
-&nbsp;
-
 ---
 
-<div class="two-column-layout">
-    
+
 ### JWT Integrity & Tampering Test
-&nbsp;
 
 ```
 {
@@ -399,18 +218,12 @@ Please try again after 15 minutes."
 }
 
 
-```
-&nbsp;
-    
+``` 
 1. Decode token on jwt.io
 2. Change role to "Admin", re-sign token with fake secret
 3. Send request with tampered token
     ❌ Should return 403 Invalid token
     
-</div>
-
-&nbsp;
-
 ---
 
 #    Reflection: Security Testing
