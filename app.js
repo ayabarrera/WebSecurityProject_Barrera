@@ -46,12 +46,11 @@ app.use(
 );
 
 //CSURF
-// Basic rate limiter: max 100 requests per 15 minutes per IP
 const limiter = rateLimit({
   windowMs: 15 * 60 * 1000, // 15 minutes
   max: 5, // only 5 login attempts allowed per 15 minutes
-  standardHeaders: true, // Return rate limit info in the `RateLimit-*` headers
-  legacyHeaders: false, // Disable the `X-RateLimit-*` headers
+  standardHeaders: true, 
+  legacyHeaders: false, 
   message: {
     error: "Too many requests, please try again later.",
   },
@@ -89,6 +88,10 @@ const csrf = require("csurf");
 const csrfProtection = csrf({ cookie: true });
 
 app.use(csrfProtection);
+
+app.get("/auth/csrf-token", (req, res) => {
+  res.json({ csrfToken: req.csrfToken() });
+});
 
 // Routes
 const questsRoute = require("./routes/quests");
