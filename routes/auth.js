@@ -49,25 +49,28 @@ passport.use(
 
 // --- Local Register ---
 router.post("/register", async (req, res) => {
-  const { username, email, password } = req.body;
+  const { username, email, password, role } = req.body;
   try {
     const hashedPassword = await argon2.hash(password);
     const user = await User.create({
       username,
       email,
       password: hashedPassword,
-      role: "User",
+      role: role || "User",  // fallback if role not provided
     });
     res.status(201).json({ message: "User created", userId: user._id });
   } catch (err) {
-    res.status(400).json({ error: "User already exists or invalid data" });
+    res.status(400).json({ error: "Invalid data" });
   }
 });
 
 // --- Local Login ---
 router.post("/login", async (req, res) => {
   const { email, password } = req.body;
+
   try {
+    const user = await User.findOne({ email });
+
     if (!user || !(await argon2.verify(user.password, password))) {
       return res.status(401).json({ error: "Invalid email or password" });
     }
@@ -105,6 +108,7 @@ router.post("/login", async (req, res) => {
     res.status(500).json({ error: "Something went wrong" });
   }
 });
+
 
 // --- Refresh Token ---
 router.post("/refresh-token", async (req, res) => {
@@ -223,17 +227,85 @@ router.get("/reset-password/:token", async (req, res) => {
 // --- Google OAuth Routes ---
 router.get(
   "/google",
-  passport.authenticate("google", { scope: ["profile", "email"] })
+  passport.authenticate("google", {
+    scope: ["profile", "email"],
+    prompt: "consent",
+  })
 );
+
 router.get(
   "/google/callback",
   passport.authenticate("google", {
     failureRedirect: "/auth/login-failure",
-    successRedirect: "/dashboard",
-  })
+    session: false,
+  }),
+  async (req, res) => {
+    const user = req.user;
+
+    const accessToken = jwt.sign(
+      { id: user._id, role: user.role },
+      process.env.JWT_SECRET,
+      { expiresIn: "15m" }
+    );
+
+    const refreshToken = jwt.sign(
+      { id: user._id },
+      process.env.REFRESH_SECRET,
+      { expiresIn: "7d" }
+    );
+
+    user.refreshToken = refreshToken;
+    await user.save();
+
+    res
+      .cookie("token", accessToken, {
+        httpOnly: true,
+        secure: true,
+        sameSite: "None",
+        maxAge: 15 * 60 * 1000,
+      })
+      .cookie("refreshToken", refreshToken, {
+        httpOnly: true,
+        secure: true,
+        sameSite: "Strict",
+        maxAge: 7 * 24 * 60 * 60 * 1000,
+      })
+      .redirect("https://localhost:3000/dashboard");
+  }
 );
-router.get("/login-failure", (req, res) => {
-  res.send("Failed to authenticate.");
+
+
+// Logout
+router.post("/logout", (req, res) => {
+  try {
+    
+    req.logout(function (err) {
+      if (err) {
+        console.error("Logout error:", err);
+        return res.status(500).json({ error: "Logout failed" });
+      }
+
+      
+      req.session?.destroy(() => {
+        res.clearCookie("token", {
+          httpOnly: true,
+          sameSite: "Strict",
+          secure: true,
+        });
+        res.clearCookie("refreshToken", {
+          httpOnly: true,
+          sameSite: "Strict",
+          secure: true,
+        });
+
+        res.json({ message: "Logged out successfully" });
+      });
+    });
+  } catch (err) {
+    console.error("Logout exception:", err);
+    res.status(500).json({ error: "Logout failed" });
+  }
 });
+
 
 module.exports = router;
