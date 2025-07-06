@@ -49,13 +49,6 @@ This section documents the testing strategies used to validate the security and 
 
 ### Protected Routes
 
-```
-{
- ADD IMAGE EXAMPLE HERE
-}
-
-```
-
 1. Postman
     - GET /profile or /dashboard
 2. Confirmation
@@ -67,13 +60,6 @@ This section documents the testing strategies used to validate the security and 
 
 ##   B. Google OAuth
 ###  Log in
-
-```
-{
-  INSERT IMAGE
-}
-
-```
     
 1. Visit: https://localhost:3000/auth/google
 2. Confirmation
@@ -87,15 +73,6 @@ This section documents the testing strategies used to validate the security and 
 
 ###  User Access
 
-```
-  {
-  "email": "test@example.com",
-  "password": "StrongPass123!"
-  }
-
-```
-
-    
 1. Login as regular user
 2. Try accessing /admin
     ❌ Should return 403 Access Denied
@@ -106,14 +83,6 @@ This section documents the testing strategies used to validate the security and 
 ---
 
 ### Token Refresh Testing
-
-
-```
-{
- ADD IMAGE EXAMPLE HERE
-}
-
-```
 
 1. Expired Token
     - Wait for access token to expire (15 mins or shorten temporarily)
@@ -145,14 +114,6 @@ Please try again after 15 minutes."
 ---
 ### CSRF Protection
 
-
-```
-{
-    ADD IMAGE HERE
-}
-
-
-```
 1. No CSRF Token
     - Submit POST without csrfToken
     ❌ Should fail CSRF validation
@@ -163,14 +124,6 @@ Please try again after 15 minutes."
 ---
     
 ### Account Enumeration Prevention
-
-```
-{
-    ADD IMAGE HERE
-}
-
-
-```
     
 1. Try login or password reset with non-existent email
 2. Confirmation
@@ -180,12 +133,6 @@ Please try again after 15 minutes."
 ---
     
 ### Session Fixation Protection
-```
-{
-    ADD IMAGE HERE
-}
-
-```
 
 1. Before login, inspect session cookie
 2. After login, check that session ID:
@@ -195,14 +142,6 @@ Please try again after 15 minutes."
 ---
     
 ### Account Enumeration Prevention
-
-```
-{
-    ADD IMAGE HERE
-}
-
-
-```
 1. Try login or password reset with non-existent email
 2. Confirmation
     ✅ Response is generic: "Invalid credentials"
@@ -211,14 +150,6 @@ Please try again after 15 minutes."
 
 
 ### JWT Integrity & Tampering Test
-
-```
-{
-    ADD IMAGE HERE
-}
-
-
-``` 
 1. Decode token on jwt.io
 2. Change role to "Admin", re-sign token with fake secret
 3. Send request with tampered token
