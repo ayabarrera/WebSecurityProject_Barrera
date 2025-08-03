@@ -1,5 +1,4 @@
 @import url('https://fonts.googleapis.com/css2?family=Jersey+25&family=Pixelify+Sans:wght@400..700&display=swap');
-
 body {
   margin: 0;
   padding: 0;
@@ -37,36 +36,6 @@ h2 {
   margin-bottom: 20px;
 }
 
-.login-box {
-  text-align: center;
-  padding: 40px 20px;
-}
-
-.btn {
-  display: inline-block;
-  padding: 10px 20px;
-  margin-top: 15px;
-  border: 2px solid #3e4d3a;
-  border-radius: 4px;
-  text-decoration: none;
-  font-weight: bold;
-  cursor: pointer;
-  transition: all 0.2s;
-}
-
-.google-btn {
-  background-color: #4285F4;
-  color: #fff;
-  border-color: #357ae8;
-}
-
-.google-btn:hover {
-  background-color: #357ae8;
-  transform: scale(1.05);
-}
-
-/* Original styles for the logged-in dashboard */
-/* These styles can be moved to a separate file for the dashboard page */
 ul {
   list-style: none;
   padding: 0;

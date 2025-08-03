@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>User Dashboard</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <div class="container">
+    <div class="box dashboard-box">
+      <h1>Welcome, <%= username %>!</h1>
+      <section id="profile" class="box profile-details-box">
+        <img src="images/aya.png" alt="Profile Picture" class="profile-img">
+        <div class="profile-details">
+          <p>Adventurer: <%= username %></p>
+          <p>Email: <%= email %></p>
+        </div>
+      </section>
+      
+      
+      <section class="box update-profile-link-box">
+        <h2>Update Your Profile</h2>
+        <a href="/profile" class="btn">Go to Profile Page</a>
+      </section>
+  
+      <form action="/auth/logout" method="POST" class="box logout-box">
+        <button type="submit" class="btn logout-btn">Logout</button>
+      </form>
+    </div>
+  </div>
+</body>
+</html>

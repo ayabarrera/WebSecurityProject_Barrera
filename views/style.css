@@ -1,0 +1,229 @@
+@import url('https://fonts.googleapis.com/css2?family=Jersey+25&family=Pixelify+Sans:wght@400..700&display=swap');
+
+body {
+  margin: 0;
+  padding: 0;
+  font-family: "Pixelify Sans", sans-serif;
+  background-color: #cce3d6;
+  background-image: url('./images/bg3.jpg'); 
+  background-size: cover;
+  color: #333;
+}
+
+.container {
+  max-width: 800px;
+  margin: auto;
+  padding: 20px;
+}
+
+h1 {
+  color: #3e4d3a;
+  text-shadow: 1px 1px #fff;
+  font-family: "Jersey 25", sans-serif;
+  font-size: 72px;
+}
+
+h2 {
+  color: #3e4d3a;
+  text-shadow: 1px 1px #fff;
+}
+
+.box {
+  background-color: #fffef0;
+  border: 3px solid #7d6e4f;
+  border-radius: 8px;
+  padding: 15px;
+  box-shadow: 2px 2px #aaa;
+  margin-bottom: 20px;
+}
+
+.login-box {
+  text-align: center;
+  padding: 40px 20px;
+}
+
+.btn {
+  display: inline-block;
+  padding: 10px 20px;
+  margin-top: 15px;
+  border: 2px solid #3e4d3a;
+  border-radius: 4px;
+  text-decoration: none;
+  font-weight: bold;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.google-btn {
+  background-color: #4285F4;
+  color: #fff;
+  border-color: #357ae8;
+}
+
+.google-btn:hover {
+  background-color: #357ae8;
+  transform: scale(1.05);
+}
+
+/* Original styles for the logged-in dashboard */
+/* These styles can be moved to a separate file for the dashboard page */
+ul {
+  list-style: none;
+  padding: 0;
+}
+
+li {
+  background: #fcf8e8;
+  margin-bottom: 8px;
+  padding: 10px;
+  border: 2px dashed #bda27a;
+  border-radius: 4px;
+  transition: transform 0.2s;
+}
+
+li:hover {
+  transform: scale(1.02);
+  background-color: #f3edd0;
+}
+
+
+.profile-img {
+  width: 100px;
+  height: 100px;
+  object-fit: cover;
+  border-radius: 8px;
+  margin-bottom: 10px;
+  display: block;
+}
+
+#profile {
+  display: flex;
+  align-items: center; 
+  gap: 20px;
+}
+
+
+.profile-details {
+  display: flex;
+  flex-direction: column;
+}
+
+#profile p {
+  margin: 5px 0;
+}
+
+/* Header for the logout button */
+.header {
+  width: 100%;
+  padding: 10px 20px;
+  box-sizing: border-box;
+  display: flex;
+  justify-content: flex-end;
+}
+
+.header form {
+  margin: 0;
+}
+
+/* Base style for all buttons and links-as-buttons */
+.btn {
+  display: inline-block;
+  padding: 10px 20px;
+  border: 2px solid #3e4d3a;
+  border-radius: 4px;
+  text-decoration: none;
+  font-family: "Pixelify Sans", sans-serif;
+  font-weight: bold;
+  cursor: pointer;
+  transition: all 0.2s;
+  background-color: #fffef0;
+  color: #3e4d3a;
+}
+
+/* Hover state for all buttons */
+.btn:hover {
+  background-color: #f3edd0;
+  transform: scale(1.05);
+}
+
+/* Specific button styles */
+.logout-btn {
+  font-size: 16px;
+  padding: 8px 16px;
+}
+
+.logout-btn:hover {
+  background-color: #d1c8b3;
+}
+
+.profile-submit-btn {
+  margin-top: 25px;
+  font-size: 18px;
+  background-color: #3e4d3a;
+  color: #fffef0;
+  border-color: #3e4d3a;
+}
+
+.profile-submit-btn:hover {
+  background-color: #5c7456;
+  border-color: #5c7456;
+}
+
+/* New styles for the profile update page */
+.profile-form-box {
+  padding: 20px;
+}
+
+/* This is the key fix for the vertical alignment */
+.profile-form-box form {
+  display: flex;
+  flex-direction: column;
+}
+
+.profile-form-box label {
+  font-weight: bold;
+  margin-top: 15px;
+  color: #3e4d3a;
+}
+
+.form-input {
+  width: 100%;
+  padding: 10px;
+  margin-top: 5px;
+  margin-bottom: 10px; /* Added spacing between form elements */
+  border: 2px solid #bda27a;
+  border-radius: 4px;
+  background-color: #fcf8e8;
+  box-sizing: border-box; 
+  font-family: "Pixelify Sans", sans-serif;
+  transition: all 0.2s;
+}
+
+.form-input:focus {
+  outline: none;
+  border-color: #3e4d3a;
+  background-color: #fff;
+}
+
+.error-message {
+  background-color: #ffcccc;
+  color: #a00000;
+  border-color: #a00000;
+  margin-bottom: 20px;
+}
+
+.success-message {
+  background-color: #ccffcc;
+  color: #006400;
+  border-color: #006400;
+  margin-bottom: 20px;
+}
+
+.back-link-box {
+  background: none;
+  border: none;
+  box-shadow: none;
+  text-align: center;
+  padding: 0;
+  margin-top: 20px;
+}
